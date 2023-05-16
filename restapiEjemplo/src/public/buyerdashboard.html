@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Buyer Dashboard</title>
+  </head>
+  <body>
+    <h1>User</h1>
+    <p>Modify your information</p>
+    <form id="put-buyer-form">
+      <input type="hidden" name="action" value="put">
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email"><br>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br>
+
+      <label for="edad">Edad:</label>
+      <input type="text" id="edad" name="edad"><br>
+
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" name="ciudad"><br>
+
+      <label for="intereses">Intereses:</label>
+      <input type="text" id="intereses" name="intereses"><br>
+
+      <label for="permite_recibir_ofertas">Permites recibir ofertas?(0:NO / 1:SI):</label>
+      <input type="text" id="permite_recibir_ofertas" name="permite_recibir_ofertas"><br>
+
+      <input type="submit" value="Put Buyer">
+    </form>
+
+    <p>Delete my account</p>
+    
+    <form id="del-buyer-form">
+      <input type="hidden" name="action" value="del">
+      <input type="submit" value="Del Buyer">
+    </form>
+  </body>
+
+  <script>
+    const PutSellerForm = document.querySelector('#put-buyer-form');
+    const DelSellerForm = document.querySelector('#del-buyer-form');
+
+    PutSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const email = PutSellerForm.elements.email.value;
+        const password = PutSellerForm.elements.password.value;
+        const edad = PutSellerForm.elements.edad.value;
+        const ciudad = PutSellerForm.elements.ciudad.value;
+        const intereses = PutSellerForm.elements.intereses.value;
+        const permite_recibir_ofertas = PutSellerForm.elements.permite_recibir_ofertas.value;
+        const action = PutSellerForm.elements.action.value;
+        
+        fetch('/buyer/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password, edad, ciudad, intereses, permite_recibir_ofertas, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.redirectUrl) {
+              window.location.href = data.redirectUrl;
+            }
+        })
+        .catch(error => console.error(error));
+    });
+
+    DelSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = DelBuyerForm.elements.action.value;
+      
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</html>

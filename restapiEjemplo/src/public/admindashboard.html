@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+  </head>
+  <body>
+    <h1>Admin</h1>
+    <p>Add seller information to database</p>
+    <form id="add-seller-form">
+      <input type="hidden" name="action" value="add">
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name"><br>
+
+      <label for="cif">CIF:</label>
+      <input type="text" id="cif" name="cif"><br>
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address"><br>
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email"><br>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br>
+
+      <label for="telefono">Telefono:</label>
+      <input type="text" id="telefono" name="telefono"><br>
+
+      <input type="submit" value="Add Seller">
+    </form>
+
+    <p>Get seller information to database</p>
+    
+    <form id="get-seller-form">
+      <input type="hidden" name="action" value="get">
+
+      <label for="name">Name:</label>
+      <input type="text" id="get_name" name="name"><br>
+
+      <input type="submit" value="Get Seller">
+    </form>
+
+    <p>Modify seller information to database</p>
+    <p>First input name to select seller, then input new information values</p>
+    <form id="put-seller-form">
+      <input type="hidden" name="action" value="put">
+
+      <label for="name">Name:</label>
+      <input type="text" id="put_name" name="name"><br>
+
+      <label for="new_name">New name:</label>
+      <input type="text" id="new_name" name="new_name"><br>
+
+      <label for="new_cif">New CIF:</label>
+      <input type="text" id="new_cif" name="new_cif"><br>
+
+      <label for="new_address">New Address:</label>
+      <input type="text" id="new_address" name="new_address"><br>
+
+      <label for="new_email">New Email:</label>
+      <input type="text" id="new_email" name="new_email"><br>
+
+      <label for="new_password">New Password:</label>
+      <input type="password" id="new_password" name="new_password"><br>
+
+      <label for="new_telefono">New Telefono:</label>
+      <input type="text" id="new_telefono" name="new_telefono"><br>
+
+      <input type="submit" value="Put Seller">
+    </form>
+
+    <p>Delete seller information to database</p>
+    
+    <form id="del-seller-form">
+      <input type="hidden" name="action" value="del">
+
+      <label for="name">Name:</label>
+      <input type="text" id="del_name" name="name"><br>
+
+      <input type="submit" value="Del Seller">
+    </form>
+  </body>
+
+  <script>
+    const AddSellerForm = document.querySelector('#add-seller-form');
+    const GetSellerForm = document.querySelector('#get-seller-form');
+    const PutSellerForm = document.querySelector('#put-seller-form');
+    const DelSellerForm = document.querySelector('#del-seller-form');
+
+
+    AddSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const name = AddSellerForm.elements.name.value;
+        const cif = AddSellerForm.elements.cif.value;
+        const address = AddSellerForm.elements.address.value;
+        const email = AddSellerForm.elements.email.value;
+        const password = AddSellerForm.elements.password.value;
+        const telefono = AddSellerForm.elements.telefono.value;
+        const action = AddSellerForm.elements.action.value;
+
+        
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, cif, address, email, password, telefono, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+    
+    GetSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const get_name = GetSellerForm.elements.get_name.value;
+        const action = GetSellerForm.elements.action.value;
+        
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ get_name, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+    
+    PutSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = PutSellerForm.elements.action.value;
+        const put_name = PutSellerForm.elements.put_name.value;
+        const new_name = PutSellerForm.elements.new_name.value;
+        const new_cif = PutSellerForm.elements.new_cif.value;
+        const new_address = PutSellerForm.elements.new_address.value;
+        const new_email = PutSellerForm.elements.new_email.value;
+        const new_password = PutSellerForm.elements.new_password.value;
+        const new_telefono = PutSellerForm.elements.new_telefono.value;
+      
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action, put_name, new_name, new_cif, new_address, new_email, new_password, new_telefono })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+
+    DelSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = DelSellerForm.elements.action.value;
+        const del_name = DelSellerForm.elements.del_name.value;
+      
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action, del_name })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</html>

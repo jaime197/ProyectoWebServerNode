@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Form</title>
+</head>
+<body>
+  <form id="login-form">
+    <input type="hidden" name="action" value="login">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Login">
+  </form>
+
+  <form id="no-login">
+    <input type="hidden" name="action" value="no_login">
+    <input type="submit" value="Continue without logging in">
+  </form>
+
+  <script>
+    const loginForm = document.querySelector('#login-form');
+    const noLoginForm = document.querySelector('#no-login');
+
+    loginForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const username = loginForm.elements.username.value;
+        const password = loginForm.elements.password.value;
+        const action = loginForm.elements.action.value;
+
+        fetch('login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.redirectUrl) {
+              window.location.href = data.redirectUrl;
+            }
+        })
+        .catch(error => console.error(error));
+    });
+
+    noLoginForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = noLoginForm.elements.action.value;
+
+        fetch('login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.redirectUrl) {
+              window.location.href = data.redirectUrl;
+            }
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</body>
+</html>

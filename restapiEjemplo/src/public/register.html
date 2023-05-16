@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Form</title>
+</head>
+<body>
+  <form id="register-form">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Register">
+  </form>
+
+  <script>
+    const registerForm = document.querySelector('#register-form');
+
+    registerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const username = registerForm.elements.username.value;
+        const password = registerForm.elements.password.value;
+
+        fetch('register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.redirectUrl) {
+              window.location.href = data.redirectUrl;
+            }
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</body>
+</html>

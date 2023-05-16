@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Seller Dashboard</title>
+  </head>
+  <body>
+    <h1>Seller</h1>
+    
+    <p>Modify your information</p>
+
+    <form id="put-seller-form">
+      <input type="hidden" name="action" value="put">
+
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" name="ciudad"><br>
+
+      <label for="actividad">Actividad:</label>
+      <input type="text" id="actividad" name="actividad"><br>
+
+      <label for="titulo">Titulo:</label>
+      <input type="text" id="titulo" name="titulo"><br>
+
+      <label for="resumen">Resumen:</label>
+      <input type="text" id="resumen" name="resumen"><br>
+
+      <input type="submit" value="Put Seller">
+    </form>
+
+    <p>Post image by url</p>
+    
+    <form id="image-form">
+      <input type="hidden" name="action" value="add_image">
+
+      <label for="image_url">Image URL:</label>
+      <input type="text" id="image_url" name="image_url"><br>
+
+      <input type="submit" value="Add Image">
+    </form>
+
+    <p>Post text</p>
+
+    <form id="text-form">
+        <input type="hidden" name="action" value="add_text">
+  
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text"><br>
+  
+        <input type="submit" value="Add Text">
+    </form>
+
+    
+    <p>Delete your account</p>
+    
+    <form id="del-seller-form">
+      <input type="hidden" name="action" value="del">
+
+      <input type="submit" value="Del Seller">
+    </form>
+
+
+    <p>Get users from same city</p>
+
+    <form id="get-users-city-form">
+        <input type="hidden" name="action" value="get_users">
+  
+        <input type="submit" value="Get Users">
+      </form>
+  </body>
+
+  <script>
+    const PutSellerForm = document.querySelector('#put-seller-form');
+    const ImageForm = document.querySelector('#image-form');
+    const TextForm = document.querySelector('#text-form');
+    const DelSellerForm = document.querySelector('#del-seller-form');
+    const GetUsersForm = document.querySelector('#get-users-city-form');
+
+
+    PutSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const ciudad = PutSellerForm.elements.ciudad.value;
+        const actividad = PutSellerForm.elements.actividad.value;
+        const titulo = PutSellerForm.elements.titulo.value;
+        const resumen = PutSellerForm.elements.resumen.value;
+        const action = PutSellerForm.elements.action.value;
+        
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ciudad, actividad, titulo, resumen, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+    
+    ImageForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const image_url = ImageForm.elements.image_url.value;
+        const action = ImageForm.elements.action.value;
+        
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ image_url, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+    
+    TextForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const text = TextForm.elements.text.value;
+        const action = TextForm.elements.action.value;
+        
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ text, action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+
+    DelSellerForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = DelSellerForm.elements.action.value;
+      
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+
+    GetUsersForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent form from submitting
+
+        const action = GetUsersForm.elements.action.value;
+      
+        fetch('/admin/dashboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handle server response
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</html>

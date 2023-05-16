@@ -1,0 +1,396 @@
+openapi: 3.0.3
+info:
+  title: API de gestion de usuarios.
+  description: Esta API esta hecha para manejar la información de los distintos tipos de usuarios en la base de datos.
+  version: 1.0.0
+servers:
+  - url: http://localhost/3001
+paths:
+  /login:
+    get:
+      summary: Render login page
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                example: Login page HTML code
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+    post:
+      summary: Handle login form submission
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                action:
+                  type: string
+      responses:
+        "200":
+          description: OK. Redirect to the appropriate dashboard based on user type.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+                    enum:
+                      - /admin/dashboard
+                      - /seller/dashboard
+                      - /buyer/dashboard
+                      - /nouser/dashboard
+                    example: /admin/dashboard
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+                    example: /error/login
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /register:
+    get:
+      summary: Render register page
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                example: Register page HTML code
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: OK. Redirect to the buyer dashboard.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+                    example: /buyer/dashboard
+        "404":
+          description: Not Found. User not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+                    example: /error/register
+        "500":
+          description: Internal Server Error. Something went wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /error/login:
+    get:
+      summary: Error route for failed login attempts
+      description: Returns the HTML page for failed login attempts
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /error/register:
+    get:
+      summary: Error route for failed register attempts
+      description: Returns the HTML page for failed register attempts
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /admin/dashboard:
+    get:
+      summary: Render the admin dashboard page
+      description: Retrieve the admin dashboard page
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      summary: Perform an action on the admin dashboard
+      description: Perform an action on the admin dashboard
+      requestBody:
+        description: The action to perform
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add, get, put, del]
+                name:
+                  type: string
+                cif:
+                  type: string
+                address:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                telefono:
+                  type: string
+                get_name:
+                  type: string
+                put_name:
+                  type: string
+                new_name:
+                  type: string
+                new_cif:
+                  type: string
+                new_address:
+                  type: string
+                new_email:
+                  type: string
+                new_password:
+                  type: string
+                new_telefono:
+                  type: string
+                del_name:
+                  type: string
+              required:
+                - action
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /buyer/dashboard:
+    get:
+      summary: Render the buyer dashboard page
+      responses:
+        "200":
+          description: Render the buyer dashboard page
+    post:
+      summary: Update or delete buyer account details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                edad:
+                  type: integer
+                ciudad:
+                  type: string
+                intereses:
+                  type: string
+                permite_recibir_ofertas:
+                  type: boolean
+              required:
+                - action
+      responses:
+        "200":
+          description: Successfully updated or deleted buyer account details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /seller/dashboard:
+    get:
+      summary: Render the seller dashboard page
+      responses:
+        "200":
+          description: Render the seller dashboard page
+    post:
+      summary: Perform an action on the seller dashboard
+      description: Performs an action on the seller dashboard, such as updating information or deleting the seller's account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  description: The action to perform on the dashboard (put, add_image, add_text, del, get_users)
+                ciudad:
+                  type: string
+                  description: The city where the seller is located
+                actividad:
+                  type: string
+                  description: The activity of the seller's business
+                titulo:
+                  type: string
+                  description: The title of the seller's business
+                resumen:
+                  type: string
+                  description: A summary of the seller's business
+                image_url:
+                  type: string
+                  description: The URL of an image to add to the seller's profile
+                text:
+                  type: string
+                  description: A text to add to the seller's profile
+      responses:
+        "200":
+          description: Successfully updated or deleted seller account details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /nouser/dashboard:
+    get:
+      summary: Return the non-user dashboard page.
+      responses:
+        "200":
+          description: OK
+    post:
+      summary: Perform actions on the non-user dashboard.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                city:
+                  type: string
+                activity:
+                  type: string
+      responses:
+        "200":
+          description: Successfully operated on nouser account.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  redirectUrl:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
